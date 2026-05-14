@@ -2,6 +2,7 @@
 import type { RequestConfig } from '@umijs/max';
 import { getIntl } from '@umijs/max';
 import { message, notification } from 'antd';
+import { ACCESS_TOKEN_STORAGE_KEY } from '@/constants/auth';
 
 // 错误处理方案： 错误类型
 enum ErrorShowType {
@@ -93,9 +94,16 @@ export const errorConfig: RequestConfig = {
   // 请求拦截器
   requestInterceptors: [
     (config: RequestOptions) => {
-      // 拦截请求配置，进行个性化处理。
-      // const url = config?.url?.concat('?token=123');
-      // return { ...config, url };
+      const token =
+        typeof localStorage !== 'undefined'
+          ? localStorage.getItem(ACCESS_TOKEN_STORAGE_KEY)
+          : null;
+      if (token) {
+        config.headers = {
+          ...config.headers,
+          Authorization: `Bearer ${token}`,
+        };
+      }
       return config;
     },
   ],

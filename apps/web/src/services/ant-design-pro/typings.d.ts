@@ -27,6 +27,8 @@ declare namespace API {
     status?: string;
     type?: string;
     currentAuthority?: string;
+    /** Issued by Nest `apps/api` after successful email (or mobile stub) login. */
+    accessToken?: string;
   };
 
   type PageParams = {

@@ -23,6 +23,7 @@ import { Alert, App, Tabs } from 'antd';
 import { createStyles } from 'antd-style';
 import React, { startTransition, useState } from 'react';
 import { Footer } from '@/components';
+import { ACCESS_TOKEN_STORAGE_KEY } from '@/constants/auth';
 import { login } from '@/services/ant-design-pro/api';
 import { getFakeCaptcha } from '@/services/ant-design-pro/login';
 import Settings from '../../../../config/defaultSettings';
@@ -163,6 +164,9 @@ const Login: React.FC = () => {
           defaultMessage: '登录成功！',
         });
         message.success(defaultLoginSuccessMessage);
+        if (msg.accessToken) {
+          localStorage.setItem(ACCESS_TOKEN_STORAGE_KEY, msg.accessToken);
+        }
         await fetchUserInfo();
         const urlParams = new URL(window.location.href).searchParams;
         const redirectUrl = getSafeRedirectUrl(urlParams.get('redirect'));
@@ -207,26 +211,26 @@ const Login: React.FC = () => {
             maxWidth: '75vw',
           }}
           logo={<img alt="logo" src="/logo.svg" />}
-          title="Ant Design"
+          title="Asia Fibre Solution"
           subTitle={intl.formatMessage({
             id: 'pages.layouts.userLayout.title',
           })}
           initialValues={{
             autoLogin: true,
           }}
-          actions={[
-            <FormattedMessage
-              key="loginWith"
-              id="pages.login.loginWith"
-              defaultMessage="其他登录方式"
-            />,
-            <ActionIcons key="icons" />,
-          ]}
+          // actions={[
+          //   <FormattedMessage
+          //     key="loginWith"
+          //     id="pages.login.loginWith"
+          //     defaultMessage="其他登录方式"
+          //   />,
+          //   <ActionIcons key="icons" />,
+          // ]}
           onFinish={async (values) => {
             await handleSubmit(values as API.LoginParams);
           }}
         >
-          <Tabs
+          {/* <Tabs
             activeKey={type}
             onChange={setType}
             centered
@@ -246,13 +250,13 @@ const Login: React.FC = () => {
                 }),
               },
             ]}
-          />
+          /> */}
 
           {status === 'error' && loginType === 'account' && (
             <LoginMessage
               content={intl.formatMessage({
                 id: 'pages.login.accountLogin.errorMessage',
-                defaultMessage: '账户或密码错误(admin/ant.design)',
+                defaultMessage: '邮箱或密码错误',
               })}
             />
           )}
@@ -266,7 +270,7 @@ const Login: React.FC = () => {
                 }}
                 placeholder={intl.formatMessage({
                   id: 'pages.login.username.placeholder',
-                  defaultMessage: '用户名: admin or user',
+                  defaultMessage: '邮箱（与 API 中 LOGIN_DEMO_EMAIL 一致）',
                 })}
                 rules={[
                   {
@@ -288,7 +292,7 @@ const Login: React.FC = () => {
                 }}
                 placeholder={intl.formatMessage({
                   id: 'pages.login.password.placeholder',
-                  defaultMessage: '密码: ant.design',
+                  defaultMessage: '密码（与 API 中 LOGIN_DEMO_PASSWORD 一致）',
                 })}
                 rules={[
                   {

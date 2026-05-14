@@ -18,6 +18,10 @@ Use **Node.js 20+** (this repo includes `.nvmrc` with **22**). Ant Design Pro v6
 
 The **web app does not talk to Supabase directly**; it calls your **Nest API** (`/api/...`). Nest owns the Supabase client (`SupabaseService` in `apps/api/src/supabase/`). You only add a `apps/web/.env` if you need other frontend-only variables.
 
+## Email login (API + Pro UI)
+
+Configure **`apps/api/.env`** (see `apps/api/.env.example`): **`JWT_SECRET`**, **`LOGIN_DEMO_EMAIL`**, **`LOGIN_DEMO_PASSWORD`**. The login form **username** field is validated as an **email** and must match `LOGIN_DEMO_EMAIL`; password must match `LOGIN_DEMO_PASSWORD`. On success the API returns a JWT; the web stores it and sends **`Authorization: Bearer`** on later requests. **`GET /api/currentUser`** reads that token and returns the Pro user shape.
+
 If you later want **Supabase Auth in the browser** (PKCE, magic links, etc.), you can add `@supabase/supabase-js` back on the web with the **anon** key, or keep auth entirely in the API and use cookies / session tokens from Nest.
 
 ## Local dev together

@@ -1,6 +1,7 @@
 // @ts-ignore
 /* eslint-disable */
 import { request } from '@umijs/max';
+import { ACCESS_TOKEN_STORAGE_KEY } from '@/constants/auth';
 
 /** 获取当前的用户 GET /api/currentUser */
 export async function currentUser(options?: { [key: string]: any }) {
@@ -14,10 +15,14 @@ export async function currentUser(options?: { [key: string]: any }) {
 
 /** 退出登录接口 POST /api/login/outLogin */
 export async function outLogin(options?: { [key: string]: any }) {
-  return request<Record<string, any>>('/api/login/outLogin', {
+  const res = await request<Record<string, any>>('/api/login/outLogin', {
     method: 'POST',
     ...(options || {}),
   });
+  if (typeof localStorage !== 'undefined') {
+    localStorage.removeItem(ACCESS_TOKEN_STORAGE_KEY);
+  }
+  return res;
 }
 
 /** 登录接口 POST /api/login/account */

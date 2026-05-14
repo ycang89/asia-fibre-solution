@@ -41,7 +41,7 @@ describe('Login Page', () => {
       rootContainer.baseElement?.querySelector('.ant-pro-form-login-desc')
         ?.textContent,
     ).toBe(
-      'Ant Design is the most influential web design specification in Xihu district',
+      'Leading, Defining & Integrating People For Your Business',
     );
 
     expect(rootContainer.asFragment()).toMatchSnapshot();

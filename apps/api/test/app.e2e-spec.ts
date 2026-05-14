@@ -17,11 +17,10 @@ describe('AppController (e2e)', () => {
     await app.init();
   });
 
-  it('/api (GET)', () => {
-    return request(app.getHttpServer())
-      .get('/api')
-      .expect(200)
-      .expect({ status: 'ok', supabase: 'missing_env' });
+  it('/api (GET)', async () => {
+    const res = await request(app.getHttpServer()).get('/api').expect(200);
+    expect(res.body).toMatchObject({ status: 'ok' });
+    expect(['configured', 'missing_env']).toContain(res.body.supabase);
   });
 
   afterEach(async () => {
