@@ -23,7 +23,7 @@ declare const __UTOO_VERSION__: string;
 
 declare namespace NodeJS {
   interface ProcessEnv {
-    SUPABASE_URL?: string;
-    SUPABASE_ANON_KEY?: string;
+    /** Public: optional absolute API origin (no trailing slash). */
+    UMI_APP_API_ORIGIN?: string;
   }
 }

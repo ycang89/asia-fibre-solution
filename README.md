@@ -14,15 +14,16 @@ Use **Node.js 20+** (this repo includes `.nvmrc` with **22**). Ant Design Pro v6
 ## Supabase
 
 1. Create a project at [https://supabase.com](https://supabase.com).
-2. Copy `apps/web/.env.example` → `apps/web/.env` and set `SUPABASE_URL` and `SUPABASE_ANON_KEY` (public anon key for the browser).
-3. Copy `apps/api/.env.example` → `apps/api/.env` and set `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` (server only; keep secret).
+2. Copy `apps/api/.env.example` → `apps/api/.env` and set `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` (server only; never expose in the browser).
 
-The web app exposes a browser client in `apps/web/src/supabase/client.ts` (`getSupabaseBrowserClient` / `supabaseBrowserClient`). The API registers a global `SupabaseService` with `getAdmin()` for privileged server work.
+The **web app does not talk to Supabase directly**; it calls your **Nest API** (`/api/...`). Nest owns the Supabase client (`SupabaseService` in `apps/api/src/supabase/`). You only add a `apps/web/.env` if you need other frontend-only variables.
+
+If you later want **Supabase Auth in the browser** (PKCE, magic links, etc.), you can add `@supabase/supabase-js` back on the web with the **anon** key, or keep auth entirely in the API and use cookies / session tokens from Nest.
 
 ## Local dev together
 
 1. Terminal A: `cd apps/api && npm run start:dev` — API on [http://127.0.0.1:3000](http://127.0.0.1:3000), routes under `/api` (e.g. [http://127.0.0.1:3000/api](http://127.0.0.1:3000/api)).
-2. Terminal B: `cd apps/web && npm start` — Umi dev server (default port **8000**). `config/proxy.ts` proxies `/api/*` to the Nest app so the frontend can call same-origin `/api/...`.
+2. Terminal B: `cd apps/web && npm start` — Umi dev server (default port **8000**). `config/proxy.ts` forwards `/api/*` to **`http://localhost:3000`** (Nest). Override with `API_PROXY_TARGET` in `apps/web/.env`, or set `UMI_APP_API_ORIGIN=http://localhost:3000` to call Nest directly from the browser (bypasses proxy; Nest CORS already allows the dev UI origin).
 
 ## Ant Design Pro
 

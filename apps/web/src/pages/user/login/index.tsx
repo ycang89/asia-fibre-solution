@@ -127,6 +127,9 @@ const Login: React.FC = () => {
     // Block protocol-relative URLs (//example.com)
     if (redirect.startsWith('//')) return '/';
 
+    // Reject junk paths (e.g. mis-built URLs ending up as route segments)
+    if (redirect.includes('"') || redirect.includes("'")) return '/';
+
     try {
       const parsed = new URL(redirect, window.location.origin);
       // Only allow same-origin URLs

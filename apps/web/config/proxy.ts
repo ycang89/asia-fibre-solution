@@ -9,11 +9,19 @@
  *
  * @doc https://umijs.org/docs/guides/proxy
  */
+
+import { normalizeHttpOrigin } from './normalizeHttpOrigin';
+
+/** Where `/api/*` is forwarded in local dev (Nest default). Override with API_PROXY_TARGET in `.env`. */
+const API_DEV_PROXY_TARGET =
+  normalizeHttpOrigin(process.env.API_PROXY_TARGET) ||
+  'http://localhost:3000';
+
 export default {
   /** Local NestJS API (see apps/api) */
   dev: {
     '/api/': {
-      target: 'http://127.0.0.1:3000',
+      target: API_DEV_PROXY_TARGET,
       changeOrigin: true,
     },
   },

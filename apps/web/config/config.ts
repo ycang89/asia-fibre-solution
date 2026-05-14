@@ -227,9 +227,8 @@ export default defineConfig({
   define: {
     'process.env.CI': process.env.CI,
     'process.env.COMMIT_HASH': commitHash,
-    'process.env.SUPABASE_URL': JSON.stringify(process.env.SUPABASE_URL ?? ''),
-    'process.env.SUPABASE_ANON_KEY': JSON.stringify(
-      process.env.SUPABASE_ANON_KEY ?? '',
+    'process.env.UMI_APP_API_ORIGIN': JSON.stringify(
+      process.env.UMI_APP_API_ORIGIN ?? '',
     ),
     __APP_VERSION__: require('./../package.json').version,
     __UMI_VERSION__: require('@umijs/max/package.json').version,

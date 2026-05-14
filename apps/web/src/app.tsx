@@ -20,11 +20,15 @@ import {
   VersionDropdown,
 } from '@/components';
 import { currentUser as queryCurrentUser } from '@/services/ant-design-pro/api';
+import { normalizeHttpOrigin } from '@root/config/normalizeHttpOrigin';
 import defaultSettings from '../config/defaultSettings';
 import { errorConfig } from './requestErrorConfig';
 
 const isDev = process.env.NODE_ENV === 'development';
 const loginPath = '/user/login';
+
+/** If set (e.g. `http://localhost:3000`), the browser calls the API directly. Leave empty in dev to use same-origin `/api` + proxy to Nest. */
+const API_ORIGIN = normalizeHttpOrigin(process.env.UMI_APP_API_ORIGIN);
 
 /**
  * @see https://umijs.org/docs/api/runtime-config#getinitialstate
@@ -184,7 +188,7 @@ export const layout: RunTimeLayoutConfig = ({
  * @doc https://umijs.org/docs/max/request#配置
  */
 export const request: RequestConfig = {
-  baseURL: isDev ? '' : 'https://pro-api.ant-design-demo.workers.dev',
+  baseURL: API_ORIGIN || '',
   ...errorConfig,
 };
 
